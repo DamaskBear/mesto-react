@@ -1,42 +1,76 @@
 import React from "react";
+import api from "../utils/api";
+import Card from "./Card";
 
 
-function Main() {
+function Main({onCardClick, onAddPlace, onEditAvatar, onEditProfile}) {
+    const [userName, setUserName] = React.useState("");
+    const [userDescription, setUserDescription] = React.useState("");
+    const [userAvatar, setUserAvatar] = React.useState("");
+    const [cards, setCards] = React.useState([]);
 
-    // function handleEditAvatarClick() {
+    React.useInsertionEffect(() => {
+        Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([userData, cardData]) => {
+            setUserName(userData.name)
+            setUserAvatar(userData.avatar);
+            setUserDescription(userData.about)
+            setCards(cardData);
+        })
+        .catch((err) => console.error(err));
+    }, []);
 
-    // }
-
-
-
-    // handleEditProfileClick
-    // handleAddPlaceClick
-
+    const cardItems = cards.map((item) => {
+        return (
+            <Card
+              key={item._id}
+              card={item}
+              onCardClick={onCardClick}
+            />
+        )
+    });
 
     return(
         <main className="main">
             <section className="profile">
                 <div className="profile__info">
-                <img className="profile__avatar" src="./images/kusto.jpg" alt="Фотография пользователя"/>
-                <button type="button" className="profile__edit-avatar-button"></button>
-                <div className="profile__container">
-                    <div className="profile__container-wrapp">
-                    <h1 className="profile__name">Жак</h1>
-                    <button type="button" className="profile__edit-button"></button>
-                    </div>
-                    <p className="profile__about">Исс</p>
+                    <img 
+                    className="profile__avatar"
+                    src={userAvatar}
+                    alt="Фотография пользователя"
+                    />
+                    <button
+                    type="button" 
+                    className="profile__edit-avatar-button"
+                    onClick={onEditAvatar}>
+                    </button>
+
+                    <div className="profile__container">
+                        <div className="profile__container-wrapp">
+                            <h1 className="profile__name">{userName}</h1>
+                            <button
+                              type="button"
+                              className="profile__edit-button"
+                              onClick={onEditProfile}>
+                            </button>
+                        </div>
+                        <p className="profile__about">{userDescription}</p>
+                    </div>  
                 </div>
-                
-                </div>
-                <button type="button" className="profile__add-button"></button>
+                <button
+                   type="button"
+                   className="profile__add-button"
+                   onClick={onAddPlace}>
+                </button>
             </section>
 
             <section className="elements">
                 <ul className="elements__card">
+                    {cardItems}
                 </ul>
             </section>
         </main>
-    )
+    );
 }
 
 export default Main;

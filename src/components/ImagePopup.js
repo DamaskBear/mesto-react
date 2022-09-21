@@ -1,4 +1,4 @@
-function ImagePopup() {
+function ImagePopup({card, onClose}) {
     return (
         <div
             className={`popup popup_type_fullscreen-photo ${
