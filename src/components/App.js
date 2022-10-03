@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import React from 'react';
 import Header from './Header';
 import Main from './Main';
@@ -7,11 +9,13 @@ import ImagePopup from './ImagePopup';
 
 
 function App() {
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isEdtitProfilePopupOpen, setIsEdtitProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpened] = React.useState(false);
-  const [selectedCard, setSelectedCards] = React.useState(null);
-
+  //states
+  const [currentUser, setCurrentUser] = useState({});
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEdtitProfilePopupOpen, setIsEdtitProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpened] = useState(false);
+  const [selectedCard, setSelectedCards] = useState(null);
+  // open popups
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
   };
@@ -27,7 +31,7 @@ function App() {
   const handleCardClick = (card) => {
     setSelectedCards(card);
   };
-
+  // close popups
   const closeAllPopup = () => {
     setIsEditAvatarPopupOpen(false);
     setIsEdtitProfilePopupOpen(false);
@@ -36,6 +40,7 @@ function App() {
   };
 
   return (
+    <CurrentUserContext.Provider value={currentUser}>
     <div className="root">
         <Header/>
         <Main
@@ -131,6 +136,7 @@ function App() {
 
         <ImagePopup card={selectedCard} onClose={closeAllPopup} />
     </div>
+    </CurrentUserContext.Provider>
   );
 }
 

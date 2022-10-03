@@ -1,24 +1,10 @@
-import React from "react";
-import api from "../utils/api";
+import { useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Card from "./Card";
 
 
-function Main({onCardClick, onAddPlace, onEditAvatar, onEditProfile}) {
-    const [userName, setUserName] = React.useState("");
-    const [userDescription, setUserDescription] = React.useState("");
-    const [userAvatar, setUserAvatar] = React.useState("");
-    const [cards, setCards] = React.useState([]);
-
-    React.useInsertionEffect(() => {
-        Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([userData, cardData]) => {
-            setUserName(userData.name)
-            setUserAvatar(userData.avatar);
-            setUserDescription(userData.about)
-            setCards(cardData);
-        })
-        .catch((err) => console.error(err));
-    }, []);
+function Main({cards, onCardClick, onAddPlace, onEditAvatar, onEditProfile, onCardLike, onCardDelete}) {
+    const currentUser = useContext(CurrentUserContext);
 
     const cardItems = cards.map((item) => {
         return (
@@ -26,6 +12,8 @@ function Main({onCardClick, onAddPlace, onEditAvatar, onEditProfile}) {
               key={item._id}
               card={item}
               onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
             />
         )
     });
@@ -36,7 +24,7 @@ function Main({onCardClick, onAddPlace, onEditAvatar, onEditProfile}) {
                 <div className="profile__info">
                     <img 
                     className="profile__avatar"
-                    src={userAvatar}
+                    src={currentUser.avatar}
                     alt="Фотография пользователя"
                     />
                     <button
@@ -47,14 +35,14 @@ function Main({onCardClick, onAddPlace, onEditAvatar, onEditProfile}) {
 
                     <div className="profile__container">
                         <div className="profile__container-wrapp">
-                            <h1 className="profile__name">{userName}</h1>
+                            <h1 className="profile__name">{currentUser.name}</h1>
                             <button
                               type="button"
                               className="profile__edit-button"
                               onClick={onEditProfile}>
                             </button>
                         </div>
-                        <p className="profile__about">{userDescription}</p>
+                        <p className="profile__about">{currentUser.about}</p>
                     </div>  
                 </div>
                 <button
