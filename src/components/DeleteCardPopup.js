@@ -1,15 +1,8 @@
 import PopupWithForm from "./PopupWithForm";
 
-function DeleteCardPopup({
-  isOpen,
-  onClose,
-  onDeleteCard,
-  //isRenderLoading,
-  //renderLoading,
-}) {
+function DeleteCardPopup({ isOpen, onClose, onDeleteCard }) {
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    //renderLoading();
     onDeleteCard();
   };
 
@@ -20,8 +13,6 @@ function DeleteCardPopup({
       buttonText="Удалить"
       isOpen={isOpen}
       onClose={onClose}
-      //isRenderLoading={isRenderLoading}
-      //renderLoadingButtonText={"Удаление..."}
       onSubmit={handleSubmit}
     />
   );

@@ -73,26 +73,6 @@ class Api {
         .then((res) => this._checkResponse(res));
     }
 
-    addLike(id) {
-        return fetch(`${this._url}/cards/${id}/likes`, {
-          method: "PUT",
-          headers: {
-            "authorization": this._token,
-          },
-        })
-        .then((res) => this._checkResponse(res));
-      }
-
-      deleteLike(id) {
-        return fetch(`${this._url}/cards/${id}/likes`, {
-          method: "DELETE",
-          headers: {
-            "authorization": this._token,
-          },
-        })
-        .then((res) => this._checkResponse(res));
-      }
-
       changeUserAvatar(data) {
         return fetch(`${this._url}/users/me/avatar`, {
           method: "PATCH",
@@ -105,6 +85,15 @@ class Api {
           }),
         })
         .then((res) => this._checkResponse(res));
+      }
+
+      changeLikeStatus(id, isLiked) {
+        return fetch(`${this._url}/cards/${id}/likes`, {
+          method: isLiked ? "DELETE" : "PUT",
+          headers: {
+            "authorization": this._token,
+          },
+        }).then((res) => this._checkResponse(res));
       }
 }
 

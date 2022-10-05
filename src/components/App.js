@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import React from 'react';
+
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -9,6 +10,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 import AddPlacePopup from "./AddPlacePopup";
+
 import api from "../utils/api";
 
 
@@ -62,7 +64,7 @@ function App() {
 
   //actions with card
 
-  //Рендер загрузки
+  //render
   const renderLoading = () => {
     setIsRenderLoading((isRenderLoading) => !isRenderLoading);
   };
@@ -71,40 +73,17 @@ function App() {
     setSelectedCard(card);
   };
 
-  const handleCardLike = () => {
-    if (card.isLiked()) {
-        api.deleteLike(card._id)
-            .then((data) => {
-                card.deleteLike();
-                card.setLike(data.likes);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-
-    } else {
-        api.addLike(card._id)
-            .then((data) => {
-                card.addLike();
-                card.setLike(data.likes);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
-};
-
-  // const handleCardLike = (card) => {
-  //   const isLiked = card.likes.some((item) => item._id === currentUser._id);
-  //   api
-  //     .changeLikeCardStatus(card._id, isLiked)
-  //     .then((newCard) => {
-  //       setCards((state) =>
-  //         state.map((card) => (card._id === newCard._id ? newCard : card))
-  //       );
-  //     })
-  //     .catch((err) => console.error(err));
-  // };
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((item) => item._id === currentUser._id);
+    api
+      .changeLikeStatus(card._id, isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((card) => (card._id === newCard._id ? newCard : card))
+        );
+      })
+      .catch((err) => console.error(err));
+  };
 
   const handleCardDelete = () => {
     api
@@ -134,7 +113,6 @@ function App() {
       .then((newData) => setCurrentUser(newData))
       .then(() => closeAllPopups())
       .catch((err) => console.log(err));
-      // .finally(() => renderLoading());
   };
 
   const handleUpdateUser = (data) => {
@@ -143,7 +121,6 @@ function App() {
       .then((newData) => setCurrentUser(newData))
       .then(() => closeAllPopups())
       .catch((err) => console.log(err));
-      //.finally(() => renderLoading())
   };
 
   return (
@@ -166,33 +143,23 @@ function App() {
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
           isRenderLoading={isRenderLoading}
-          // renderLoading={renderLoading}
-          // renderLoadingButtonText={"Сохранение..."}
         />
 
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
-          //isRenderLoading={isRenderLoading}
-          //renderLoading={renderLoading}
-          //renderLoadingButtonText={"Обновление..."}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddNewCard={handleAddPlaceSubmit}
-          //isRenderLoading={isRenderLoading}
-          //renderLoading={renderLoading}
-          //renderLoadingButtonText={"Добавление..."}
         />
 
         <DeleteCardPopup
           isOpen={isDeleteCardPopupOpen}
           onClose={closeAllPopups}
-          //isRenderLoading={isRenderLoading}
-          //renderLoading={renderLoading}
           onDeleteCard={handleCardDelete}
         />        
 
