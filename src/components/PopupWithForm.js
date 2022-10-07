@@ -1,7 +1,7 @@
 function PopupWithForm({name, title, children, buttonText, isOpen, onClose, onSubmit, isRenderLoading}) {
 
     const popupClassName = `popup popup_type_${name} ${isOpen ? 'popup_opened' : ""}`;
-    const sumbitButtonClassName = `popup__button ${isRenderLoading ? 'popup__button_disabled' : ''}`
+    const sumbitButtonClassName = `popup__button ${isRenderLoading ? "disabled" : ''}`
     return (
         <div className={popupClassName}>
             <div className="popup__container">

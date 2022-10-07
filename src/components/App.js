@@ -19,12 +19,11 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEdtitProfilePopupOpen, setIsEdtitProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpened] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [deletedCard, setDeletedCard] = useState("");
-  const [isRenderLoading, setIsRenderLoading] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getInitialCards(), api.getUserInfo()])
@@ -45,7 +44,7 @@ function App() {
   };
 
   const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpened(true);
+    setIsAddPlacePopupOpen(true);
   };
 
   const handleDeleteCardClick = (card) => {
@@ -56,18 +55,13 @@ function App() {
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpen(false);
     setIsEdtitProfilePopupOpen(false);
-    setIsAddPlacePopupOpened(false);
+    setIsAddPlacePopupOpen(false);
     setSelectedCard(null);
     setIsDeleteCardPopupOpen(false);
     setDeletedCard(null);
   };
 
   //actions with card
-
-  //render
-  const renderLoading = () => {
-    setIsRenderLoading((isRenderLoading) => !isRenderLoading);
-  };
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -95,7 +89,6 @@ function App() {
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err))
-      .finally(() => renderLoading());
   };
 
   const handleAddPlaceSubmit = (cardData) => {
@@ -104,7 +97,6 @@ function App() {
       .then((data) => setCards([data, ...cards]))
       .then(() => closeAllPopups())
       .catch((err) => console.error(err))
-      .finally(() => renderLoading());
   };
 
   const handleUpdateAvatar = (data) => {
@@ -142,7 +134,6 @@ function App() {
           isOpen={isEdtitProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
-          isRenderLoading={isRenderLoading}
         />
 
         <EditAvatarPopup
